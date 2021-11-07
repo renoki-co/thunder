@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "^8.0"
+        "laravel/framework": "^7.40|^8.60"
     },
     "autoload": {
         "psr-4": {
@@ -27,11 +27,16 @@
     "scripts": {
         "test": "vendor/bin/phpunit"
     },
+    "suggest": {
+        "doctrine/dbal": "Required by Thunder to modify tables in the database.",
+        "laravel/spark-stripe": "Required in case you are using Stripe.",
+        "laravel/spark-paddle": "Required in case you are using Paddle."
+    },
     "require-dev": {
         "laravel/legacy-factories": "^1.1",
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^5.0|^6.0",
-        "orchestra/database": "^5.0|^6.0",
+        "orchestra/testbench": "^6.21",
+        "orchestra/database": "^6.21",
         "vimeo/psalm": "4.11.2"
     },
     "config": {
@@ -45,8 +50,14 @@
             ]
         }
     },
-    "repositories": [{
-        "type": "git",
-        "url": "git@github.com:renoki-co/testing-spark-package.git"
-    }]
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@github.com:renoki-co/spark-paddle.git"
+        },
+        {
+            "type": "git",
+            "url": "git@github.com:renoki-co/spark-stripe.git"
+        }
+    ]
 }

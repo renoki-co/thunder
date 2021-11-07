@@ -1,6 +1,6 @@
 <?php
 
-namespace RenokiCo\:package_namespace\Test\Models;
+namespace RenokiCo\Thunder\Test\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 

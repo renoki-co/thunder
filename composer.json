@@ -1,9 +1,9 @@
 {
-    "name": "renoki-co/:package_name",
-    "description": ":package_description",
-    "keywords": ["laravel", "php"],
+    "name": "renoki-co/thunder",
+    "description": "Thunder is an advanced Laravel Spark addon that makes your billing app feel more like it's on steroids. ⚡",
+    "keywords": ["laravel", "php", "spark", "billing", "thunder", "saas", "stripe", "cashier", "paddle"],
     "license": "Apache-2.0",
-    "homepage": "https://github.com/renoki-co/:package_name",
+    "homepage": "https://github.com/renoki-co/thunder",
     "authors": [
         {
             "name": "Alex Renoki",
@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RenokiCo\\:package_namespace\\": "src/"
+            "RenokiCo\\Thunder\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RenokiCo\\:package_namespace\\Test\\": "tests"
+            "RenokiCo\\Thunder\\Test\\": "tests"
         }
     },
     "scripts": {
@@ -41,8 +41,12 @@
     "extra": {
         "laravel": {
             "providers": [
-                "RenokiCo\\:package_namespace\\:package_service_provider"
+                "RenokiCo\\Thunder\\ThunderServiceProvider"
             ]
         }
-    }
+    },
+    "repositories": [{
+        "type": "git",
+        "url": "git@github.com:renoki-co/testing-spark-package.git"
+    }]
 }

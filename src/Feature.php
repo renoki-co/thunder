@@ -45,9 +45,9 @@ class Feature implements Arrayable
     /**
      * Initialize the Feature.
      *
-     * @param string $name
-     * @param string|int $id
-     * @param int|float $value
+     * @param  string  $name
+     * @param  string|int  $id
+     * @param  int|float  $value
      * @return void
      */
     public function __construct(string $name, $id, $value)

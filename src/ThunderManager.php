@@ -29,7 +29,7 @@ class ThunderManager extends SparkManager
      * Get a plan instance by billable and ID.
      *
      * @param  string  $billableType
-     * @param  string|int $id
+     * @param  string|int  $id
      * @return \RenokiCo\Thunder\Plan|null
      */
     public function getPlan($billableType, $id)

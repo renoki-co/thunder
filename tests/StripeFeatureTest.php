@@ -2,12 +2,11 @@
 
 namespace RenokiCo\Thunder\Test;
 
-use RenokiCo\Thunder\Thunder;
 use Carbon\Carbon;
 use Laravel\Cashier\Subscription;
 use RenokiCo\Thunder\Feature as SaasFeature;
-use RenokiCo\Thunder\Saas;
 use RenokiCo\Thunder\Test\Models\User;
+use RenokiCo\Thunder\Thunder;
 use Stripe\ApiResource;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\Plan;

@@ -35,9 +35,9 @@
     "require-dev": {
         "laravel/legacy-factories": "^1.1",
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^6.21",
-        "orchestra/database": "^6.21",
-        "vimeo/psalm": "4.11.2"
+        "orchestra/testbench": "^6.22",
+        "orchestra/database": "^6.0",
+        "vimeo/psalm": "4.12.0"
     },
     "config": {
         "sort-packages": true

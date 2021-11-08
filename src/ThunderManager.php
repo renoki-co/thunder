@@ -3,11 +3,8 @@
 namespace RenokiCo\Thunder;
 
 use Closure;
-use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Subscription;
 use Laravel\Cashier\SubscriptionBuilder;
-use Stripe\Product;
-use Stripe\Stripe;
 
 class ThunderManager
 {

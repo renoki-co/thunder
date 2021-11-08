@@ -3,7 +3,7 @@
 
 ![CI](https://github.com/renoki-co/thunder/workflows/CI/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/renoki-co/thunder/branch/master/graph/badge.svg)](https://codecov.io/gh/renoki-co/thunder/branch/master)
-[![StyleCI](https://github.styleci.io/repos/:styleci_code/shield?branch=master)](https://github.styleci.io/repos/:styleci_code)
+[![StyleCI](https://github.styleci.io/repos/425555174/shield?branch=master)](https://github.styleci.io/repos/425555174)
 [![Latest Stable Version](https://poser.pugx.org/renoki-co/thunder/v/stable)](https://packagist.org/packages/renoki-co/thunder)
 [![Total Downloads](https://poser.pugx.org/renoki-co/thunder/downloads)](https://packagist.org/packages/renoki-co/thunder)
 [![Monthly Downloads](https://poser.pugx.org/renoki-co/thunder/d/monthly)](https://packagist.org/packages/renoki-co/thunder)

@@ -72,7 +72,7 @@ class ThunderManager
      * @param  string  $featureId
      * @param  \Laravel\Cashier\Subscription  $subscription
      * @param  int  $quantity
-     * @param  \DateTimeInterface|int|null $timestamp
+     * @param  \DateTimeInterface|int|null  $timestamp
      * @return \Stripe\UsageRecord
      */
     public function reportUsageFor(

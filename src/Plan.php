@@ -30,24 +30,6 @@ class Plan
     }
 
     /**
-     * Inherit features from another plan.
-     *
-     * @param  \RenokiCo\Thunder\Plan  $plan
-     * @return self
-     */
-    public function inheritFeaturesFromPlan(Plan $plan, array $features = [])
-    {
-        $this->features = collect($features)
-            ->merge($plan->features)
-            ->merge($this->features)
-            ->unique(function (Feature $feature) {
-                return $feature->id;
-            });
-
-        return $this;
-    }
-
-    /**
      * Get the metered features.
      *
      * @return \Illuminate\Support\Collection

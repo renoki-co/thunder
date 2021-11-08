@@ -52,7 +52,7 @@ jobs:
 
     - name: Authenticate Composer
       run: |
-        composer config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+        composer config github-oauth.github.com ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
     - name: Install dependencies
       run: |

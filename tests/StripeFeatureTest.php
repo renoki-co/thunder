@@ -373,6 +373,10 @@ class StripeFeatureTest extends TestCase
     {
         parent::setUpBeforeClass();
 
+        if (! class_exists(\Stripe\Stripe::class)) {
+            return;
+        }
+
         Stripe::setApiKey(getenv('STRIPE_SECRET') ?: env('STRIPE_SECRET'));
 
         static::$productId = Product::create(['name' => 'Demo Product'])->id;
@@ -423,6 +427,10 @@ class StripeFeatureTest extends TestCase
     {
         parent::setUp();
 
+        if (! class_exists(\Stripe\Stripe::class)) {
+            $this->markTestSkipped('Stripe is not installed.');
+        }
+
         $freeStripePlan = Thunder::plan('user', 'Free Plan', static::$stripeFreePlanId)
             ->incentive(static::$stripeFreePlanId, static::$stripeYearlyPlanId)
             ->features([
@@ -455,6 +463,10 @@ class StripeFeatureTest extends TestCase
     public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
+
+        if (! class_exists(\Stripe\Stripe::class)) {
+            return;
+        }
 
         static::deleteStripeResource(new Plan(static::$stripeMonthlyPlanId));
         static::deleteStripeResource(new Plan(static::$stripeYearlyPlanId));

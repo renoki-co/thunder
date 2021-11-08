@@ -316,6 +316,10 @@ class PaddleFeatureTest extends TestCase
     {
         parent::setUp();
 
+        if (! class_exists(\Laravel\Paddle\Cashier::class)) {
+            $this->markTestSkipped('Paddle is not installed.');
+        }
+
         $freePaddlePlan = Thunder::plan('user', 'Free Plan', static::$paddleFreePlanId)
             ->monthly(static::$paddleFreePlanId)
             ->features([

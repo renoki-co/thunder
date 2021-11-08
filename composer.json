@@ -52,11 +52,11 @@
     },
     "repositories": [
         {
-            "type": "git",
+            "type": "vcs",
             "url": "git@github.com:renoki-co/spark-paddle.git"
         },
         {
-            "type": "git",
+            "type": "vcs",
             "url": "git@github.com:renoki-co/spark-stripe.git"
         }
     ]

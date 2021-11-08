@@ -3,8 +3,7 @@
 namespace RenokiCo\Thunder\Test\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spark\Billable;
-
+use Laravel\Cashier\Billable;
 class User extends Authenticatable
 {
     use Billable;

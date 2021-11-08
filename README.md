@@ -9,7 +9,7 @@
 [![Monthly Downloads](https://poser.pugx.org/renoki-co/thunder/d/monthly)](https://packagist.org/packages/renoki-co/thunder)
 [![License](https://poser.pugx.org/renoki-co/thunder/license)](https://packagist.org/packages/renoki-co/thunder)
 
-Thunder is an advanced Laravel Spark addon that makes your billing app feel more like it's on steroids. ⚡
+Thunder is an advanced Laravel tool to track user consumption using Cashier's Metered Billing for Stripe. ⚡
 
 ## 🤝 Supporting
 

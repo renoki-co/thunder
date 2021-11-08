@@ -3,102 +3,205 @@
 namespace RenokiCo\Thunder;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
-use Spark\SparkManager;
+use Laravel\Cashier\Cashier;
+use Laravel\Cashier\Subscription;
+use Laravel\Cashier\SubscriptionBuilder;
+use Stripe\Product;
+use Stripe\Stripe;
 
-class ThunderManager extends SparkManager
+class ThunderManager
 {
     /**
      * The callback to call when syncing the current usage.
      *
      * @var array[Closure]
      */
-    protected $syncUsageCallbacks = [];
+    protected $reportUsageCallbacks = [];
 
     /**
-     * {@inheritdoc}
+     * Initialize a new plan.
+     *
+     * @param  string|null  $name
+     * @param  string  $id
+     * @param  \RenokiCo\Thunder\Feature[]  $features
+     * @return \RenokiCo\Thunder\Plan
      */
-    public function plan($billableType, $name, $id)
+    public function plan(string $name = null, string $id, $features = [])
     {
-        $this->plans[$billableType][] = $plan = new Plan($name, $id);
+        if ($plan = $this->plans[$id] ?? null) {
+            return $plan;
+        }
+
+        $this->plans[$id] = $plan = new Plan($name, $id, $features);
 
         return $plan;
     }
 
     /**
-     * Get a plan instance by billable and ID.
+     * Create a new subscription builder instance by attaching metered
+     * features prices from the given plan.
      *
-     * @param  string  $billableType
-     * @param  string|int  $id
-     * @return \RenokiCo\Thunder\Plan|null
+     * @param  \Laravel\Cashier\SubscriptionBuilder  $subscription
+     * @param  \RenokiCo\Thunder\Plan  $plan
+     * @return \Laravel\Cashier\SubscriptionBuilder
      */
-    public function getPlan($billableType, $id)
+    public function subscription(SubscriptionBuilder $subscription, Plan $plan)
     {
-        return $this->plans($billableType)->first(function (Plan $plan) use ($id) {
-            return $plan->id == $id;
-        });
+        foreach ($plan->meteredFeatures() as $feature) {
+            $subscription->meteredPrice($feature->stripePriceId);
+        }
+
+        return $subscription;
+    }
+
+    /**
+     * Add a callback to sync the feature usage automatically.
+     *
+     * @param  string|int  $id
+     * @param  Closure  $callback
+     * @return void
+     */
+    public function autoReportUsage(string $id, Closure $callback)
+    {
+        $this->reportUsageCallbacks[$id] = $callback;
+    }
+
+    /**
+     * Report the usage for the given feature.
+     *
+     * @param  string  $featureId
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @param  int  $quantity
+     * @param  \DateTimeInterface|int|null $timestamp
+     * @return \Stripe\UsageRecord
+     */
+    public function reportUsageFor(
+        string $featureId,
+        Subscription $subscription,
+        $quantity = 1,
+        $timestamp = null,
+    ) {
+        if (! $plan = $this->getPlanFromSubscription($subscription)) {
+            return;
+        }
+
+        $feature = $plan->feature($featureId);
+
+        return $subscription->reportUsageFor($feature->stripePriceId, $quantity, $timestamp);
+    }
+
+    /**
+     * Automatically update the usage reports for all the prices
+     * within the subscriptions, according to the autoReportUsage() declarations.
+     *
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @return void
+     */
+    public function updateUsageReports(Subscription $subscription)
+    {
+        if (! $plan = $this->getPlanFromSubscription($subscription)) {
+            return;
+        }
+
+        foreach ($plan->meteredFeatures() as $feature) {
+            $this->updateUsageReport($feature, $subscription);
+        }
+    }
+
+    /**
+     * Automatically update the usage reports for the given feature prices
+     * within the subscription, according to the autoReportUsage() declarations.
+     *
+     * @param  string|\RenokiCo\Thunder\MeteredFeature  $feature
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @return void
+     */
+    public function updateUsageReport($feature, Subscription $subscription)
+    {
+        if (! $plan = $this->getPlanFromSubscription($subscription)) {
+            return;
+        }
+
+        $feature = $feature instanceof MeteredFeature ? $feature : $plan->feature($feature);
+        $featureUsage = $this->calculateFeatureUsage($feature, $subscription);
+
+        if (! $feature instanceof MeteredFeature) {
+            return;
+        }
+
+        if (! is_null($featureUsage)) {
+            $subscription->reportUsageFor($feature->stripePriceId, $featureUsage, now());
+        }
+    }
+
+    /**
+     * Get the usage for the feature.
+     *
+     * @param  string  $featureId
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @return mixed
+     */
+    public function usage(string $featureId, Subscription $subscription)
+    {
+        if (! $plan = $this->getPlanFromSubscription($subscription)) {
+            return;
+        }
+
+        $feature = $plan->feature($featureId);
+
+        if (! $feature instanceof MeteredFeature) {
+            return;
+        }
+
+        $records = $subscription->usageRecordsFor($feature->stripePriceId);
+
+        return $records->isNotEmpty() ? $records[0]->total_usage : 0;
     }
 
     /**
      * Start creating a new feature.
      *
      * @param  string  $name
-     * @param  string|int  $id
-     * @param  int|float  $value
+     * @param  string  $id
      * @return \RenokiCo\Thunder\Feature
      */
-    public function feature($name, $id, $value = 0)
+    public function feature(string $name, string $id)
     {
-        return new Feature($name, $id, $value);
+        return new Feature($name, $id, null);
     }
 
     /**
      * Start creating a new metered feature.
      *
      * @param  string  $name
-     * @param  string|int  $id
-     * @param  int|float  $value
+     * @param  string  $id
+     * @param  string  $stripePriceId
      * @return \RenokiCo\Thunder\MeteredFeature
      */
-    public function meteredFeature($name, $id, $value = 0)
+    public function meteredFeature(string $name, string $id, string $stripePriceId)
     {
-        return new MeteredFeature($name, $id, $value);
+        return new MeteredFeature($name, $id, $stripePriceId);
     }
 
-    /**
-     * Add a callback to sync the feature usage.
-     *
-     * @param  string|int  $id
-     * @param  Closure  $callback
-     * @return void
-     */
-    public function syncFeatureUsage($id, Closure $callback)
+    /* public function importPlans(array $productIds)
     {
-        $this->syncUsageCallbacks[$id] = $callback;
-    }
+        foreach ($productIds as $productId => $extraFeatures) {
+            $prices = Cashier::stripe()->prices->all([
+                'product' => $productId,
+            ]);
 
-    /**
-     * Apply the feature usage sync via callback.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $subscription
-     * @param  \RenokiCo\Thunder\Feature  $feature
-     * @return int|float|null
-     */
-    public function applyFeatureUsageSync(Model $subscription, Feature $feature)
-    {
-        if ($callback = $this->syncUsageCallbacks[$feature->id] ?? null) {
-            return call_user_func($callback, $subscription, $feature);
+            dd($prices);
         }
-    }
+    } */
 
     /**
      * Clear the sync usage callbacks.
      *
      * @return void
      */
-    public function cleanSyncUsageCallbacks(): void
+    public function cleanReportUsageCallbacks(): void
     {
-        $this->syncUsageCallbacks = [];
+        $this->reportUsageCallbacks = [];
     }
 
     /**
@@ -109,5 +212,32 @@ class ThunderManager extends SparkManager
     public function clearPlans(): void
     {
         $this->plans = [];
+    }
+
+    /**
+     * Calculate the feature usage for a given feature, if possible.
+     *
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @param  \RenokiCo\Thunder\Feature  $feature
+     * @return int|float|null
+     */
+    protected function calculateFeatureUsage(Feature $feature, Subscription $subscription)
+    {
+        if (! $callback = $this->reportUsageCallbacks[$feature->id] ?? null) {
+            return null;
+        }
+
+        return call_user_func($callback, $feature, $subscription);
+    }
+
+    /**
+     * Get the plan from the given subscription.
+     *
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @return \RenokiCo\Thunder\Plan|null
+     */
+    protected function getPlanFromSubscription(Subscription $subscription)
+    {
+        return $this->plan(id: $subscription->stripe_price ?: $subscription->items[0]->stripe_product);
     }
 }

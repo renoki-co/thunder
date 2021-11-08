@@ -2,25 +2,19 @@
 
 namespace RenokiCo\Thunder;
 
-use Spark\Plan as SparkPlan;
+use Illuminate\Support\Collection;
 
-class Plan extends SparkPlan
+class Plan
 {
-    /**
-     * The features list for the instance.
-     *
-     * @var \Illuminate\Support\Collection
-     */
-    public $features;
-
     /**
      * {@inheritdoc}
      */
-    public function __construct($name, $id)
-    {
-        parent::__construct($name, $id);
-
-        $this->features([]);
+    public function __construct(
+        public string $name,
+        public string $id,
+        public Collection|array $features = [],
+    ) {
+        $this->features($features);
     }
 
     /**
@@ -61,7 +55,7 @@ class Plan extends SparkPlan
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getMeteredFeatures()
+    public function meteredFeatures()
     {
         return $this->features->filter(function ($feature) {
             return $feature instanceof MeteredFeature;
@@ -71,10 +65,10 @@ class Plan extends SparkPlan
     /**
      * Get a specific feature by id.
      *
-     * @param  \RenokiCo\Thunder\Feature|string|int  $feature
+     * @param  \RenokiCo\Thunder\Feature|string  $feature
      * @return \RenokiCo\Thunder\Feature|null
      */
-    public function getFeature($feature)
+    public function feature($feature)
     {
         if ($feature instanceof Feature) {
             $feature = $feature->id;
@@ -90,18 +84,10 @@ class Plan extends SparkPlan
      */
     public function toArray()
     {
-        return array_merge(parent::toArray(), [
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
             'features' => $this->features->all(),
-        ]);
-    }
-
-    /**
-     * Get the plan ID.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->id;
+        ];
     }
 }

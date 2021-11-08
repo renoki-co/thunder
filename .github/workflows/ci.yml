@@ -18,15 +18,12 @@ jobs:
 
     strategy:
       matrix:
-        stack:
-          - Paddle
-          - Stripe
         php:
           - '8.0'
         laravel:
           - 8.*
         prefer:
-        #  - 'prefer-lowest'
+          - 'prefer-lowest'
           - 'prefer-stable'
         include:
           - laravel: '8.*'
@@ -50,26 +47,9 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
-    - name: Authenticate Composer
-      run: |
-        composer config github-oauth.github.com ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-
     - name: Install dependencies
       run: |
         composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" "doctrine/dbal:^2.9" --no-interaction --no-update
-
-    - name: Install Paddle
-      if: "matrix.stack == 'Paddle'"
-      run: |
-        composer require laravel/spark-paddle
-
-    - name: Install Stripe
-      if: "matrix.stack == 'Stripe'"
-      run: |
-        composer require laravel/spark-stripe
-
-    - name: Force lowest or stable
-      run: |
         composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
 
     # - name: Run static analysis
@@ -81,11 +61,6 @@ jobs:
         vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
       env:
         STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
-        PADDLE_VENDOR_ID: ${{ secrets.PADDLE_VENDOR_ID }}
-        PADDLE_VENDOR_AUTH_CODE: ${{ secrets.PADDLE_VENDOR_AUTH_CODE }}
-        PADDLE_TEST_PLAN: ${{ secrets.PADDLE_TEST_PLAN }}
-        PADDLE_TEST_FREE_PLAN: ${{ secrets.PADDLE_TEST_FREE_PLAN }}
-        PADDLE_YEARLY_TEST_PLAN: ${{ secrets.PADDLE_YEARLY_TEST_PLAN }}
 
     - uses: codecov/codecov-action@v2.1.0
       with:

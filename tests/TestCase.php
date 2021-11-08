@@ -2,6 +2,7 @@
 
 namespace RenokiCo\Thunder\Test;
 
+use Laravel\Cashier\Cashier;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RenokiCo\Thunder\Test\Models\User;
 use RenokiCo\Thunder\Thunder;
@@ -16,11 +17,11 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         Thunder::clearPlans();
-        Thunder::cleanSyncUsageCallbacks();
+
+        Cashier::useCustomerModel(User::class);
 
         $this->resetDatabase();
         $this->loadLaravelMigrations(['--database' => 'sqlite']);
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->withFactories(__DIR__.'/database/factories');
 
         $this->artisan('migrate');
@@ -31,23 +32,10 @@ abstract class TestCase extends Orchestra
      */
     protected function getPackageProviders($app)
     {
-        $cashierProviders = [
+        return [
             \Laravel\Cashier\CashierServiceProvider::class,
-            \Laravel\Paddle\CashierServiceProvider::class,
-        ];
-
-        $providers = [];
-
-        foreach ($cashierProviders as $cashierProvider) {
-            if (class_exists($cashierProvider)) {
-                $providers[] = $cashierProvider;
-            }
-        }
-
-        return array_merge($providers, [
-            \Spark\SparkServiceProvider::class,
             \RenokiCo\Thunder\ThunderServiceProvider::class,
-        ]);
+        ];
     }
 
     /**
@@ -63,8 +51,6 @@ abstract class TestCase extends Orchestra
             'database' => __DIR__.'/database.sqlite',
             'prefix'   => '',
         ]);
-        $app['config']->set('spark.billables.user.model', User::class);
-        $app['config']->set('spark.billables.user.plans', []);
     }
 
     /**

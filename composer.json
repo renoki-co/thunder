@@ -1,7 +1,7 @@
 {
     "name": "renoki-co/thunder",
-    "description": "Thunder is an advanced Laravel Spark addon that makes your billing app feel more like it's on steroids. ⚡",
-    "keywords": ["laravel", "php", "spark", "billing", "thunder", "saas", "stripe", "cashier", "paddle"],
+    "description": "Thunder is an advanced Laravel tool to track user consumption using Cashier's Metered Billing for Stripe. ⚡",
+    "keywords": ["laravel", "php", "billing", "thunder", "saas", "stripe", "cashier"],
     "license": "Apache-2.0",
     "homepage": "https://github.com/renoki-co/thunder",
     "authors": [
@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "laravel/framework": "^7.40|^8.60"
+        "laravel/cashier": "^13.0"
     },
     "autoload": {
         "psr-4": {
@@ -26,11 +26,6 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit"
-    },
-    "suggest": {
-        "doctrine/dbal": "Required by Thunder to modify tables in the database.",
-        "laravel/spark-stripe": "Required in case you are using Stripe.",
-        "laravel/spark-paddle": "Required in case you are using Paddle."
     },
     "require-dev": {
         "laravel/legacy-factories": "^1.1",
@@ -49,15 +44,5 @@
                 "RenokiCo\\Thunder\\ThunderServiceProvider"
             ]
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:renoki-co/spark-paddle.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:renoki-co/spark-stripe.git"
-        }
-    ]
+    }
 }

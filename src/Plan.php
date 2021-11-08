@@ -6,9 +6,6 @@ use Illuminate\Support\Collection;
 
 class Plan
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(
         public string $name,
         public string $id,
@@ -79,9 +76,6 @@ class Plan
         });
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toArray()
     {
         return [

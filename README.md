@@ -29,11 +29,13 @@ This project comes with Cashier, and it's really important [to install it](https
 
 ## 🙌 Usage
 
-Thunder is working with Metered Billing to track resources quotas for your users. You may define plans with certain features that are connected to Stripe by a Price ID.
+Thunder tracks resources quotas for your users via Stripe Metered Billing.
 
-This way, you can call usage reports [just like Cashier's Metered Billing](https://laravel.com/docs/8.x/billing#metered-billing) and declare your plans and prices' Stripe IDs only once throughout the code. Reporting the usages is done with the IDs you define instead of unique pricing IDs that are different for each environment your deploy your app in.
+You may only define plans with certain features that are connected to Stripe by IDs. You declare your plans and prices' Stripe IDs only once throughout the code.
 
-You can call usage reports [just like Cashier's Metered Billing](https://laravel.com/docs/8.x/billing#metered-billing) directly from Thunder, by mentioning the given feature ID:
+Reporting the usages is done with the IDs you define instead of unique pricing IDs that are different for each environment your deploy your app in, making it consistent throughout the code.
+
+This way, you can call usage reports just like [Cashier's Metered Billing](https://laravel.com/docs/8.x/billing#metered-billing), but instead of using the Stripe IDs, you are using the defined IDs:
 
 ```php
 use RenokiCo\Thunder\Thunder;

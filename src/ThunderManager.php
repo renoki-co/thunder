@@ -55,9 +55,27 @@ class ThunderManager
     }
 
     /**
+     * Check if the subscription has the given feature.
+     *
+     * @param  string  $id
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @return bool
+     */
+    public function hasFeature(string $id, Subscription $subscription)
+    {
+        $plan = $this->getPlanFromSubscription($subscription);
+
+        if (! $plan) {
+            return false;
+        }
+
+        return ! is_null($plan->feature($id));
+    }
+
+    /**
      * Add a callback to sync the feature usage automatically.
      *
-     * @param  string|int  $id
+     * @param  string  $id
      * @param  Closure  $callback
      * @return void
      */
@@ -139,7 +157,7 @@ class ThunderManager
      *
      * @param  string  $featureId
      * @param  \Laravel\Cashier\Subscription  $subscription
-     * @return mixed
+     * @return int|float
      */
     public function usage(string $featureId, Subscription $subscription)
     {
@@ -182,17 +200,6 @@ class ThunderManager
     {
         return new MeteredFeature($name, $id, $stripePriceId);
     }
-
-    /* public function importPlans(array $productIds)
-    {
-        foreach ($productIds as $productId => $extraFeatures) {
-            $prices = Cashier::stripe()->prices->all([
-                'product' => $productId,
-            ]);
-
-            dd($prices);
-        }
-    } */
 
     /**
      * Clear the sync usage callbacks.

@@ -11,6 +11,12 @@
 
 Thunder is an advanced Laravel tool to track user consumption using Cashier's Metered Billing for Stripe. ⚡
 
+## 🤝 Supporting
+
+**If you are using one or more Renoki Co. open-source packages in your production apps, in presentation demos, hobby projects, school projects or so, sponsor our work with [Github Sponsors](https://github.com/sponsors/rennokki). 📦**
+
+[<img src="https://github-content.s3.fr-par.scw.cloud/static/45.jpg" height="210" width="418" />](https://github-content.renoki.org/github-repo/45)
+
 ## 🚀 Installation
 
 You can install the package via composer:
@@ -19,16 +25,30 @@ You can install the package via composer:
 composer require renoki-co/thunder
 ```
 
-Publish the migrations:
-
-```bash
-$ php artisan vendor:publish --provider="RenokiCo\Thunder\ThunderServiceProvider" --tag="migrations"
-```
+This project comes with Cashier, and it's really important [to install it](https://laravel.com/docs/8.x/billing#installation) before diving in the documentation.
 
 ## 🙌 Usage
 
+Thunder is working with Metered Billing to track resources quotas for your users. You may define plans with certain features that are connected to Stripe by a Price ID.
+
+This way, you can call usage reports [just like Cashier's Metered Billing](https://laravel.com/docs/8.x/billing#metered-billing) and declare your plans and prices' Stripe IDs only once throughout the code. Reporting the usages is done with the IDs you define instead of unique pricing IDs that are different for each environment your deploy your app in.
+
+You can call usage reports [just like Cashier's Metered Billing](https://laravel.com/docs/8.x/billing#metered-billing) directly from Thunder, by mentioning the given feature ID:
+
 ```php
-$ //
+use RenokiCo\Thunder\Thunder;
+
+Thunder::plan('Unlimited Plan', 'stripe_product_id', [
+    Thunder::meteredFeature('Build Minutes', 'build.minutes', 'stripe_build_minutes_price_id'),
+    Thunder::meteredFeature('Seats', 'seats', 'stripe_seats_price_id'),
+]);
+
+$subscription = $user->subscription('main');
+
+Thunder::reportUsageFor('build.minutes', $subscription, 50);
+Thunder::reportUsageFor('build.minutes', $subscription, 100);
+
+Thunder::usage('build.minutes', $subscription); // 150
 ```
 
 ## 🐛 Testing

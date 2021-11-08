@@ -77,12 +77,6 @@ class MeteredBillingTest extends TestCase
     {
         parent::setUp();
 
-        // Thunder::importPlans([
-        //     static::$product->id => [
-        //         Thunder::feature('VIP Access', 'vip.access'),
-        //     ],
-        // ]);
-
         Thunder::plan('Basic Plan', static::$product->id, [
             Thunder::feature('VIP Access', 'vip.access'),
             Thunder::meteredFeature('Build Minutes', 'build.minutes', static::$buildMinutesPrice->id),
@@ -141,5 +135,8 @@ class MeteredBillingTest extends TestCase
         Thunder::reportUsageFor('build.minutes', $user->subscription('main'), 50);
 
         $this->assertEquals(200, Thunder::usage('build.minutes', $user->subscription('main')));
+
+        $this->assertTrue(Thunder::hasFeature('vip.access', $user->subscription('main')));
+        $this->assertFalse(Thunder::hasFeature('extra.gold', $user->subscription('main')));
     }
 }

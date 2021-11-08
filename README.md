@@ -31,7 +31,7 @@ This project comes with Cashier, and it's really important [to install it](https
 
 Thunder tracks resources quotas for your users via Stripe Metered Billing.
 
-You may only define plans with certain features that are connected to Stripe by IDs. You declare your plans and prices' Stripe IDs only once throughout the code.
+You may only define plans with certain features that are connected to Stripe by IDs, declaring them only once throughout your code.
 
 Reporting the usages is done with the IDs you define instead of unique pricing IDs that are different for each environment your deploy your app in, making it consistent throughout the code.
 

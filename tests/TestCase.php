@@ -17,6 +17,7 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         Thunder::clearPlans();
+        Thunder::cleanReportUsageCallbacks();
 
         Cashier::useCustomerModel(User::class);
 

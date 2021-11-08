@@ -65,17 +65,13 @@ class Plan
     /**
      * Get a specific feature by id.
      *
-     * @param  \RenokiCo\Thunder\Feature|string  $feature
+     * @param  string  $featureId
      * @return \RenokiCo\Thunder\Feature|null
      */
-    public function feature($feature)
+    public function feature($featureId)
     {
-        if ($feature instanceof Feature) {
-            $feature = $feature->id;
-        }
-
-        return $this->features->first(function (Feature $f) use ($feature) {
-            return $f->id == $feature;
+        return $this->features->first(function (Feature $f) use ($featureId) {
+            return $f->id == $featureId;
         });
     }
 

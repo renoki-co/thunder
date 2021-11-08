@@ -217,8 +217,8 @@ class ThunderManager
     /**
      * Calculate the feature usage for a given feature, if possible.
      *
-     * @param  \Laravel\Cashier\Subscription  $subscription
      * @param  \RenokiCo\Thunder\Feature  $feature
+     * @param  \Laravel\Cashier\Subscription  $subscription
      * @return int|float|null
      */
     protected function calculateFeatureUsage(Feature $feature, Subscription $subscription)

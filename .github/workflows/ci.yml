@@ -50,6 +50,10 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
+    - name: Authenticate Composer
+      run: |
+        composer config -g github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+
     - name: Install dependencies
       run: |
         composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" "doctrine/dbal:^2.9" --no-interaction --no-update

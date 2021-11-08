@@ -95,7 +95,7 @@ trait HasQuotas
             });
 
             if ($feature instanceof MeteredFeature && method_exists($this, 'reportUsageFor')) {
-                /** @var MeteredFeature $feature */
+                /** @var \RenokiCo\Thunder\MeteredFeature $feature */
                 /** @var \Laravel\Cashier\Subscription $this */
 
                 // If the user has for example 5 minutes left and the pipeline
@@ -106,7 +106,7 @@ trait HasQuotas
                 $this->reportUsageFor($feature->meteredId, $valueOverQuota);
             }
 
-            /** @var Feature $feature */
+            /** @var \RenokiCo\Thunder\Feature $feature */
 
             // Fill the usage later since the getRemainingQuotaFor() uses the $usage
             // object that was updated with the current requested feature usage recording.

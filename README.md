@@ -1,5 +1,5 @@
-Package Name Here
-===================================
+⚡ Thunder
+==========
 
 ![CI](https://github.com/renoki-co/thunder/workflows/CI/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/renoki-co/thunder/branch/master/graph/badge.svg)](https://codecov.io/gh/renoki-co/thunder/branch/master)
@@ -9,7 +9,7 @@ Package Name Here
 [![Monthly Downloads](https://poser.pugx.org/renoki-co/thunder/d/monthly)](https://packagist.org/packages/renoki-co/thunder)
 [![License](https://poser.pugx.org/renoki-co/thunder/license)](https://packagist.org/packages/renoki-co/thunder)
 
-This is where your description should go. Try and limit it to a paragraph or two. Consider adding a small example.
+Thunder is an advanced Laravel Spark addon that makes your billing app feel more like it's on steroids. ⚡
 
 ## 🤝 Supporting
 
@@ -25,12 +25,6 @@ You can install the package via composer:
 
 ```bash
 composer require renoki-co/thunder
-```
-
-Publish the config:
-
-```bash
-$ php artisan vendor:publish --provider="RenokiCo\Thunder\ThunderServiceProvider" --tag="config"
 ```
 
 Publish the migrations:

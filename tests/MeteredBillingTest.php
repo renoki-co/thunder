@@ -78,7 +78,8 @@ class MeteredBillingTest extends TestCase
         parent::setUp();
 
         Thunder::plan('Basic Plan', static::$product->id, [
-            Thunder::feature('VIP Access', 'vip.access'),
+            Thunder::feature('VIP Access', 'vip.access', true),
+            Thunder::feature('Extra Gold', 'extra.gold', 100),
             Thunder::meteredFeature('Build Minutes', 'build.minutes', static::$buildMinutesPrice->id),
             Thunder::meteredFeature('Seats', 'seats', static::$seatsPrice->id),
         ]);
@@ -137,6 +138,7 @@ class MeteredBillingTest extends TestCase
         $this->assertEquals(200, Thunder::usage('build.minutes', $user->subscription('main')));
 
         $this->assertTrue(Thunder::hasFeature('vip.access', $user->subscription('main')));
-        $this->assertFalse(Thunder::hasFeature('extra.gold', $user->subscription('main')));
+        $this->assertFalse(Thunder::hasFeature('extra.silver', $user->subscription('main')));
+        $this->assertEquals(100, Thunder::featureValue('extra.gold', $user->subscription('main')));
     }
 }

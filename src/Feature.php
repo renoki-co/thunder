@@ -11,13 +11,13 @@ class Feature implements Arrayable
      *
      * @param  string  $name
      * @param  string  $id
-     * @param  string|null  $stripePriceId
+     * @param  mixed  $value
      * @return void
      */
     public function __construct(
         public string $name,
         public string $id,
-        public string|null $stripePriceId = null,
+        public mixed $value = null,
     ) {
         //
     }

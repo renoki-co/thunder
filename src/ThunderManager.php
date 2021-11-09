@@ -70,6 +70,26 @@ class ThunderManager
     }
 
     /**
+     * Retrieved the declared feature value.
+     *
+     * @param  string  $id
+     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @return mixed
+     */
+    public function featureValue(string $id, Subscription $subscription)
+    {
+        $plan = $this->getPlanFromSubscription($subscription);
+
+        if (! $plan) {
+            return;
+        }
+
+        $feature = $plan->feature($id);
+
+        return $feature ? $feature->value : null;
+    }
+
+    /**
      * Add a callback to sync the feature usage automatically.
      *
      * @param  string  $id
@@ -178,11 +198,12 @@ class ThunderManager
      *
      * @param  string  $name
      * @param  string  $id
+     * @param  mixed  $value
      * @return \RenokiCo\Thunder\Feature
      */
-    public function feature(string $name, string $id)
+    public function feature(string $name, string $id, mixed $value = null)
     {
-        return new Feature($name, $id, null);
+        return new Feature($name, $id, $value);
     }
 
     /**

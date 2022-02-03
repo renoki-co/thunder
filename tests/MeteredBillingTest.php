@@ -14,11 +14,13 @@ use Stripe\Stripe;
 class MeteredBillingTest extends TestCase
 {
     protected static $buildMinutesPrice;
+
     protected static $seatsPrice;
+
     protected static $product;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function setUpBeforeClass(): void
     {
@@ -71,7 +73,7 @@ class MeteredBillingTest extends TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUp(): void
     {
@@ -86,7 +88,7 @@ class MeteredBillingTest extends TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function tearDownAfterClass(): void
     {

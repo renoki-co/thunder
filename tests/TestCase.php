@@ -10,7 +10,7 @@ use RenokiCo\Thunder\Thunder;
 abstract class TestCase extends Orchestra
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUp(): void
     {
@@ -29,7 +29,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getPackageProviders($app)
     {
@@ -40,7 +40,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getEnvironmentSetUp($app)
     {

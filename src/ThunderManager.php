@@ -23,7 +23,7 @@ class ThunderManager
      * @param  \RenokiCo\Thunder\Feature[]  $features
      * @return \RenokiCo\Thunder\Plan
      */
-    public function plan(string $name = null, string $id, $features = [])
+    public function plan(?string $name = null, ?string $id, ?array $features = [])
     {
         if ($plan = $this->plans[$id] ?? null) {
             return $plan;

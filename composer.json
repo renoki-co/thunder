@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.0",
         "stripe/stripe-php": "^7.100",
-        "laravel/cashier": "^13.5.6"
+        "laravel/cashier": "^13.x-dev"
     },
     "autoload": {
         "psr-4": {
